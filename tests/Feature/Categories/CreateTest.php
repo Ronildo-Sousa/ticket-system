@@ -9,45 +9,51 @@ use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseCount;
 
 beforeEach(function () {
-    $this->user = User::factory()->create(['role_id' => Roles::Administrator]);
+    $this->user = User::factory()->create(['role_id' => Roles::Administrator->value]);
+});
+
+it('shows a form to create a category', function () {
+    actingAs($this->user)
+        ->get(route('categories.create'))
+        ->assertOk()
+        ->assertSeeText(__('category'));
 });
 
 it('should be able to create a category', function () {
-    $response = actingAs($this->user)
+    actingAs($this->user)
         ->post(route('categories.store', [
             'name' => 'test category'
-        ]));
-
-    $response->assertStatus(Response::HTTP_CREATED);
+        ]))
+        ->assertRedirect(route('categories.index'));
 
     assertDatabaseCount('categories', 1);
 });
 
 test('only admin user can create a category', function () {
     /** @var User $nonAdmin */
-    $nonAdmin = User::factory()->create(['role_id', Roles::Regular]);
+    $nonAdmin = User::factory()->create(['role_id' => Roles::Regular]);
 
-    $response = actingAs($nonAdmin)
-        ->post(route('categories.store'));
-
-    $response->assertStatus(Response::HTTP_FORBIDDEN);
+    actingAs($nonAdmin)
+        ->post(route('categories.store', [
+            'name' => 'test name'
+        ]))
+        ->assertForbidden();
 });
 
 test('category name should be required and unique', function () {
     Category::factory()->create(['name' => 'category1']);
 
-    $response1 = actingAs($this->user)
+    actingAs($this->user)
         ->post(route('categories.store', [
             'name' => ''
-        ]));
+        ]))
+        ->assertStatus(Response::HTTP_FOUND)
+        ->assertSessionHasErrors(['name']);
 
-    $response1->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-    $response1->assertSessionHasErrors(['name']);
-
-    $response2 = actingAs($this->user)
+    actingAs($this->user)
         ->post(route('categories.store', [
             'name' => 'category1'
-        ]));
-    $response2->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-    $response2->assertSessionHasErrors(['name']);
+        ]))
+        ->assertStatus(Response::HTTP_FOUND)
+        ->assertSessionHasErrors(['name']);
 });

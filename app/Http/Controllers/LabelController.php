@@ -14,7 +14,9 @@ class LabelController extends Controller
 
     public function index()
     {
-        //
+        $labels = Label::query()->orderBy('created_at', 'DESC')->get();
+
+        return view('components.labels.index', compact('labels'));
     }
 
     public function create()

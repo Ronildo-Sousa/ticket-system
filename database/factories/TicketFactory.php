@@ -22,7 +22,7 @@ class TicketFactory extends Factory
         return [
             'title' => fake()->sentence(4),
             'description' => fake()->paragraph(6),
-            'priority' => $priority[rand(0, 2)],
+            'priority_id' => rand(0, 2),
             'status' => $status[rand(0, 1)]
         ];
     }

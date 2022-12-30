@@ -40,4 +40,9 @@ class Ticket extends Model
     {
         return $this->hasMany(File::class);
     }
+
+    public function priority(): BelongsTo
+    {
+        return $this->belongsTo(Priority::class);
+    }
 }

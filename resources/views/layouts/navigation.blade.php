@@ -27,6 +27,18 @@
                             {{ __('Categories') }}
                         </x-nav-link>
                     @endcan
+                    @can('create', App\Models\Label::class)
+                        <x-nav-link 
+                            :href="route('labels.index')" 
+                            :active="
+                                request()->routeIs('labels.index') || 
+                                request()->routeIs('labels.create')||
+                                request()->routeIs('labels.update')
+                                "
+                            >
+                            {{ __('Labels') }}
+                        </x-nav-link>
+                    @endcan
                 </div>
             </div>
 

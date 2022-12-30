@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Priority;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -18,9 +19,10 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->enum('priority', ['LOW', 'MEDIUM', 'HIGH'])->default('LOW');
+            $table->foreignIdFor(Priority::class);
             $table->enum('status', ['open', 'closed'])->default('open');
             $table->foreignIdFor(User::class);
+            $table->foreignIdFor(User::class, 'assigned_user_agent')->nullable();
             $table->timestamps();
         });
     }

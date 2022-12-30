@@ -18,7 +18,7 @@ class PriorityFactory extends Factory
     {
         $priorities = ['LOW', 'MEDIUM', 'HIGH'];
         return [
-            'name' => rand(0, 2)
+            'name' => $priorities[rand(0, 2)]
         ];
     }
 }

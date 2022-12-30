@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TicketRequest;
+use App\Models\Category;
+use App\Models\Label;
+use App\Models\Priority;
 use App\Models\Ticket;
 
 class TicketController extends Controller
@@ -14,7 +17,14 @@ class TicketController extends Controller
 
     public function create()
     {
-        //
+        $priorities = Priority::all();
+        $categories = Category::all();
+        $labels = Label::all();
+        return view('components.tickets.create', compact([
+            'priorities',
+            'labels',
+            'categories',
+        ]));
     }
 
     public function store(TicketRequest $request)
@@ -24,7 +34,7 @@ class TicketController extends Controller
                 'title' => $request->validated('title'),
                 'description' => $request->validated('description'),
                 'priority_id' => $request->validated('priority_id'),
-                'user_id' => $request->validated('user_id'),
+                'user_id' => auth()->id()
             ]);
 
         $ticket->categories()->attach($request->validated('categories'));

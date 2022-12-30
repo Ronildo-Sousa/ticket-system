@@ -16,13 +16,19 @@ beforeEach(function () {
     $this->user = User::factory()->create(['role_id' => Roles::Regular]);
 });
 
+it('has a create ticket page', function () {
+    actingAs($this->user)
+        ->get(route('tickets.create'))
+        ->assertOk()
+        ->assertSeeText(__('ticket'));
+});
+
 it('should be able to user create a ticket', function () {
     actingAs($this->user)
         ->post(route('tickets.store', [
             'title' => fake()->sentence(),
             'description' => fake()->paragraph(),
             'priority_id' => 1,
-            'user_id' => 1,
             'categories' => [1],
             'labels' => [1, 2],
         ]))

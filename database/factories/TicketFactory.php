@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,13 +18,13 @@ class TicketFactory extends Factory
     public function definition()
     {
         $status = ['open', 'closed'];
-        $priority = ['LOW', 'MEDIUM', 'HIGH'];
 
         return [
             'title' => fake()->sentence(4),
             'description' => fake()->paragraph(6),
             'priority_id' => rand(0, 2),
-            'status' => $status[rand(0, 1)]
+            'status' => $status[rand(0, 1)],
+            'user_id' => (User::first()) ? User::first() : User::factory()
         ];
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TicketController;
@@ -16,6 +17,7 @@ Route::prefix('dashboard')->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('labels', LabelController::class);
     Route::resource('tickets', TicketController::class);
+    Route::resource('comments', CommentController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

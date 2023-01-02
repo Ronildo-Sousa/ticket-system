@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-card class="mx-auto lg:w-3/4">
-        <form action="{{ route('tickets.store') }}" method="post">
+        <form action="{{ route('tickets.store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <h1 class="mb-3 text-xl font-semibold">{{ __('Create a new ticket') }}</h1>
             <div>
@@ -42,6 +42,10 @@
                     @endforeach
                 </select>
                 <x-input-error :messages="$errors->get(__('priority'))" class="mt-2" />
+            </div>
+            <div>
+                <label class="form-label">Select Files:</label>
+                <input type="file" name="attached_files[]" class="form-control" multiple />
             </div>
             <div>
                 <x-primary-button>

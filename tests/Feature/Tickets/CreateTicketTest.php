@@ -41,6 +41,7 @@ it('should be able to user create a ticket', function () {
     assertDatabaseCount('label_ticket', 2);
 });
 
+//  REVER ESTE TESTE
 it('should be able to attach files to a ticket', function () {
     Storage::fake('tickets-files');
     $files = [];

@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TicketRequest;
 use App\Models\Category;
+use App\Models\File;
 use App\Models\Label;
 use App\Models\Priority;
 use App\Models\Ticket;
+use Illuminate\Support\Facades\Storage;
 
 class TicketController extends Controller
 {
@@ -39,6 +41,23 @@ class TicketController extends Controller
 
         $ticket->categories()->attach($request->validated('categories'));
         $ticket->labels()->attach($request->validated('labels'));
+
+        foreach ($request->attached_files as $file) {
+            $filePath = 'ticktet-files/' . uniqid();
+
+            $path = $file->storeAs(
+                $filePath,
+                $file->getClientOriginalName(),
+                'public'
+            );
+
+            File::query()
+                ->create([
+                    'name' => $file->getClientOriginalName(),
+                    'file_path' => $path,
+                    'ticket_id' => $ticket->id
+                ]);
+        }
 
         return to_route('tickets.index');
     }

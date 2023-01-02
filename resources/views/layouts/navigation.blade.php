@@ -15,27 +15,22 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('tickets.index')" :active="request()->routeIs('tickets.index') ||
+                        request()->routeIs('tickets.create') ||
+                        request()->routeIs('tickets.update')">
+                        {{ __('Tickets') }}
+                    </x-nav-link>
                     @can('create', App\Models\Category::class)
-                        <x-nav-link 
-                            :href="route('categories.index')" 
-                            :active="
-                                request()->routeIs('categories.index') || 
-                                request()->routeIs('categories.create')||
-                                request()->routeIs('categories.update')
-                                "
-                            >
+                        <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.index') ||
+                            request()->routeIs('categories.create') ||
+                            request()->routeIs('categories.update')">
                             {{ __('Categories') }}
                         </x-nav-link>
                     @endcan
                     @can('create', App\Models\Label::class)
-                        <x-nav-link 
-                            :href="route('labels.index')" 
-                            :active="
-                                request()->routeIs('labels.index') || 
-                                request()->routeIs('labels.create')||
-                                request()->routeIs('labels.update')
-                                "
-                            >
+                        <x-nav-link :href="route('labels.index')" :active="request()->routeIs('labels.index') ||
+                            request()->routeIs('labels.create') ||
+                            request()->routeIs('labels.update')">
                             {{ __('Labels') }}
                         </x-nav-link>
                     @endcan
@@ -102,6 +97,25 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('tickets.index')" :active="request()->routeIs('tickets.index') ||
+                request()->routeIs('tickets.create') ||
+                request()->routeIs('tickets.update')">
+                {{ __('Tickets') }}
+            </x-responsive-nav-link>
+            @can('create', App\Models\Category::class)
+                <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.index') ||
+                    request()->routeIs('categories.create') ||
+                    request()->routeIs('categories.update')">
+                    {{ __('Categories') }}
+                </x-responsive-nav-link>
+            @endcan
+            @can('create', App\Models\Label::class)
+                <x-responsive-nav-link :href="route('labels.index')" :active="request()->routeIs('labels.index') ||
+                    request()->routeIs('labels.create') ||
+                    request()->routeIs('labels.update')">
+                    {{ __('Labels') }}
+                </x-responsive-nav-link>
+            @endcan
         </div>
 
         <!-- Responsive Settings Options -->

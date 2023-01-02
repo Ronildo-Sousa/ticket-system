@@ -14,7 +14,10 @@ class TicketController extends Controller
 {
     public function index()
     {
-        return Ticket::all();
+        $tickets = Ticket::query()
+            ->orderBy('created_at', 'DESC')->get();
+
+        return view('components.tickets.index', compact('tickets'));
     }
 
     public function create()
@@ -42,21 +45,23 @@ class TicketController extends Controller
         $ticket->categories()->attach($request->validated('categories'));
         $ticket->labels()->attach($request->validated('labels'));
 
-        foreach ($request->attached_files as $file) {
-            $filePath = 'ticktet-files/' . uniqid();
+        if ($request->attached_files) {
+            foreach ($request->attached_files as $file) {
+                $filePath = 'ticktet-files/' . uniqid();
 
-            $path = $file->storeAs(
-                $filePath,
-                $file->getClientOriginalName(),
-                'public'
-            );
+                $path = $file->storeAs(
+                    $filePath,
+                    $file->getClientOriginalName(),
+                    'public'
+                );
 
-            File::query()
-                ->create([
-                    'name' => $file->getClientOriginalName(),
-                    'file_path' => $path,
-                    'ticket_id' => $ticket->id
-                ]);
+                File::query()
+                    ->create([
+                        'name' => $file->getClientOriginalName(),
+                        'file_path' => $path,
+                        'ticket_id' => $ticket->id
+                    ]);
+            }
         }
 
         return to_route('tickets.index');

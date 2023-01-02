@@ -16,6 +16,7 @@ Route::prefix('dashboard')->group(function () {
     Route::get('/', fn () => view('dashboard'))->name('dashboard');
     Route::resource('categories', CategoryController::class);
     Route::resource('labels', LabelController::class);
+    Route::get('/tickets/{ticket}/details', [TicketController::class, 'details'])->name('tickets.details');
     Route::resource('tickets', TicketController::class);
     Route::resource('comments', CommentController::class);
 

@@ -8,7 +8,6 @@ use App\Models\File;
 use App\Models\Label;
 use App\Models\Priority;
 use App\Models\Ticket;
-use Illuminate\Support\Facades\Storage;
 
 class TicketController extends Controller
 {
@@ -65,6 +64,11 @@ class TicketController extends Controller
         }
 
         return to_route('tickets.index');
+    }
+
+    public function details(Ticket $ticket)
+    {
+        return view('components.tickets.details', compact(['ticket']));
     }
 
     public function show($id)

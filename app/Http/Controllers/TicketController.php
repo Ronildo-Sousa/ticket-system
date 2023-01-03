@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TicketRequest;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\File;
 use App\Models\Label;
 use App\Models\Priority;
@@ -68,7 +69,10 @@ class TicketController extends Controller
 
     public function details(Ticket $ticket)
     {
-        return view('components.tickets.details', compact(['ticket']));
+        $comments = Comment::query()
+            ->where('ticket_id', $ticket->id)->paginate(6);
+
+        return view('components.tickets.details', compact(['ticket', 'comments']));
     }
 
     public function show($id)

@@ -17,7 +17,8 @@
                     </x-nav-link>
                     <x-nav-link :href="route('tickets.index')" :active="request()->routeIs('tickets.index') ||
                         request()->routeIs('tickets.create') ||
-                        request()->routeIs('tickets.update')">
+                        request()->routeIs('tickets.update') ||
+                        request()->routeIs('tickets.details')">
                         {{ __('Tickets') }}
                     </x-nav-link>
                     @can('create', App\Models\Category::class)
@@ -99,7 +100,8 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('tickets.index')" :active="request()->routeIs('tickets.index') ||
                 request()->routeIs('tickets.create') ||
-                request()->routeIs('tickets.update')">
+                request()->routeIs('tickets.update') ||
+                request()->routeIs('tickets.details')">
                 {{ __('Tickets') }}
             </x-responsive-nav-link>
             @can('create', App\Models\Category::class)

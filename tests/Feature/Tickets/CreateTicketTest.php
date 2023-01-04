@@ -61,6 +61,6 @@ test('admin should be notified when a new ticket is created', function () {
             'labels' => [1, 2],
         ]));
 
-    Notification::assertSentTo(User::admin()->get(), TicketCreated::class);
+    User::admin()->each(fn ($user) => Notification::assertSentTo($user, TicketCreated::class));
     Notification::assertCount(User::admin()->count());
 });

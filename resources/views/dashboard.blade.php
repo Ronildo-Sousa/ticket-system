@@ -6,6 +6,8 @@
     </x-slot>
 
     <x-card>
-        {{ __("You're logged in!") }}
+        total {{ $totalTickets }}
+        open {{ $openTickets }}
+        closed {{ $closedTickets }}
     </x-card>
 </x-app-layout>

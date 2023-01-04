@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ticket\Status;
 use App\Http\Requests\TicketRequest;
 use App\Models\Category;
 use App\Models\Comment;
@@ -13,6 +14,27 @@ use App\Notifications\TicketCreated;
 
 class TicketController extends Controller
 {
+    public function dashboard()
+    {
+        $totalTickets = Ticket::all()->count();
+        $openTickets = Ticket::query()->where('status', Status::Open)->count();
+        $closedTickets = Ticket::query()->where('status', Status::Closed)->count();
+
+        return view('dashboard', compact([
+            'totalTickets',
+            'openTickets',
+            'closedTickets'
+        ]));
+    }
+
+    public function details(Ticket $ticket)
+    {
+        $comments = Comment::query()
+            ->where('ticket_id', $ticket->id)->paginate(6);
+
+        return view('components.tickets.details', compact(['ticket', 'comments']));
+    }
+
     public function index()
     {
         $tickets = Ticket::query()
@@ -49,14 +71,6 @@ class TicketController extends Controller
         User::admin()->each(fn ($user) => $user->notify(new TicketCreated($ticket)));
 
         return to_route('tickets.index');
-    }
-
-    public function details(Ticket $ticket)
-    {
-        $comments = Comment::query()
-            ->where('ticket_id', $ticket->id)->paginate(6);
-
-        return view('components.tickets.details', compact(['ticket', 'comments']));
     }
 
     public function show($id)

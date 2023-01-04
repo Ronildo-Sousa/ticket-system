@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Enums\Roles;
+use App\Enums\user\Roles;
 use App\Models\Category;
 use App\Models\Label;
 use App\Models\Priority;

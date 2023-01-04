@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\Roles;
+use App\Enums\user\Roles;
 use App\Models\Ticket;
 use App\Models\User;
 

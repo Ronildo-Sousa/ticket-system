@@ -13,7 +13,7 @@ Route::get('/', function () {
 });
 
 Route::prefix('dashboard')->group(function () {
-    Route::get('/', fn () => view('dashboard'))->name('dashboard');
+    Route::get('/', [TicketController::class, 'dashboard'])->name('dashboard');
     Route::resource('categories', CategoryController::class);
     Route::resource('labels', LabelController::class);
     Route::get('/tickets/{ticket}/details', [TicketController::class, 'details'])->name('tickets.details');

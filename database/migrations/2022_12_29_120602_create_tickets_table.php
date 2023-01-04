@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ticket\Status;
 use App\Models\Priority;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -20,7 +21,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->foreignIdFor(Priority::class);
-            $table->enum('status', ['open', 'closed'])->default('open');
+            $table->enum('status', [Status::Open->value, Status::Closed->value])->default(Status::Open->value);
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(User::class, 'assigned_user_agent')->nullable();
             $table->timestamps();

@@ -30,18 +30,6 @@
                     <p>
                         {{ $ticket->description }}
                     </p>
-                    <div class="mt-4">
-                        <h3 class="text-lg font-semibold">{{ __('Files') }}</h3>
-                        <ul>
-                            @foreach ($ticket->files as $file)
-                                <li class="ml-5">
-                                    <a href="{{ public_path($file->file_path) }}" download>
-                                        {{ $file->name }}
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
                 </div>
             </div>
         </x-card>

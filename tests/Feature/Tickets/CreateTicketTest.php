@@ -6,6 +6,7 @@ use App\Models\Label;
 use App\Models\Priority;
 use App\Models\Role;
 use App\Models\User;
+use App\Notifications\TicketCreated;
 use Illuminate\Support\Facades\Notification;
 
 use function Pest\Laravel\actingAs;
@@ -60,6 +61,6 @@ test('admin should be notified when a new ticket is created', function () {
             'labels' => [1, 2],
         ]));
 
-    Notification::assertSentTo(User::admin()->get(), TickteCreated::class);
+    Notification::assertSentTo(User::admin()->get(), TicketCreated::class);
     Notification::assertCount(User::admin()->count());
 });

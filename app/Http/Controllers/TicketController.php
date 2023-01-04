@@ -8,6 +8,8 @@ use App\Models\Comment;
 use App\Models\Label;
 use App\Models\Priority;
 use App\Models\Ticket;
+use App\Models\User;
+use App\Notifications\TicketCreated;
 
 class TicketController extends Controller
 {
@@ -43,6 +45,8 @@ class TicketController extends Controller
 
         $ticket->categories()->attach($request->validated('categories'));
         $ticket->labels()->attach($request->validated('labels'));
+
+        User::admin()->each(fn ($user) => $user->notify(new TicketCreated($ticket)));
 
         return to_route('tickets.index');
     }

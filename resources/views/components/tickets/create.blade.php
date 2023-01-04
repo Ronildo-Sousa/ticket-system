@@ -44,10 +44,6 @@
                 <x-input-error :messages="$errors->get(__('priority'))" class="mt-2" />
             </div>
             <div>
-                <label class="form-label">Select Files:</label>
-                <input type="file" name="attached_files[]" class="form-control" multiple />
-            </div>
-            <div>
                 <x-primary-button>
                     {{ __('create') }}
                 </x-primary-button>

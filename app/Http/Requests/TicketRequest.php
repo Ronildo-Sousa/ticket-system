@@ -28,7 +28,9 @@ class TicketRequest extends FormRequest
             'description' => ['required'],
             'priority_id' => ['required'],
             'categories' => ['required', 'array'],
+            'categories.*' => ['exists:categories,id'],
             'labels' => ['required', 'array'],
+            'labels.*' => ['exists:labels,id'],
         ];
     }
 }

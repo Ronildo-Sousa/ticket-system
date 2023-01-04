@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\ticket\Status;
 use App\Enums\user\Roles;
 use App\Http\Requests\TicketRequest;
 use App\Models\Category;
@@ -17,30 +16,19 @@ class TicketController extends Controller
 {
     public function dashboard()
     {
-        if (auth()->user()->role_id === Roles::Regular->value) {
-            $tickets = auth()->user()->tickets;
-
-            $totalTickets = $tickets->count();
-            $openTickets = $tickets->where('status', Status::Open->value)->count();
-            $closedTickets = $tickets->where('status', Status::Closed->value)->count();
-        }
+        $tickets = auth()->user()->tickets;
 
         if (auth()->user()->role_id !== Roles::Regular->value) {
-            $tickets = Ticket::query()
-                ->where('user_id', auth()->id())
-                ->orWhere('assigned_user_agent', auth()->id())
-                ->get();
-
-            $totalTickets = $tickets->count();
-            $openTickets = $tickets->where('status', Status::Open->value)->count();
-            $closedTickets = $tickets->where('status', Status::Closed->value)->count();
+            $tickets = Ticket::fromNotRegularUsers();
         }
 
-        return view('dashboard', compact([
-            'totalTickets',
-            'openTickets',
-            'closedTickets'
-        ]));
+        $amount = Ticket::getAmount($tickets);
+
+        return view('dashboard', [
+            'totalTickets' => $amount['total'],
+            'openTickets' => $amount['open'],
+            'closedTickets' => $amount['closed']
+        ]);
     }
 
     public function details(Ticket $ticket)
@@ -56,10 +44,7 @@ class TicketController extends Controller
         $tickets = auth()->user()->tickets->sortDesc();
 
         if (auth()->user()->role_id !== Roles::Regular->value) {
-            $tickets = $tickets = Ticket::query()
-                ->where('user_id', auth()->id())
-                ->orWhere('assigned_user_agent', auth()->id())
-                ->get();
+            $tickets = Ticket::fromNotRegularUsers();
         }
 
         return view('components.tickets.index', compact('tickets'));
@@ -67,14 +52,11 @@ class TicketController extends Controller
 
     public function create()
     {
-        $priorities = Priority::all();
-        $categories = Category::all();
-        $labels = Label::all();
-        return view('components.tickets.create', compact([
-            'priorities',
-            'labels',
-            'categories',
-        ]));
+        return view('components.tickets.create', [
+            'priorities' => Priority::all(),
+            'labels' => Category::all(),
+            'categories' => Label::all(),
+        ]);
     }
 
     public function store(TicketRequest $request)

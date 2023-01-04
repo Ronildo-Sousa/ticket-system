@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ticket\Status;
+use App\Enums\user\Roles;
 use App\Http\Requests\TicketRequest;
 use App\Models\Category;
 use App\Models\Comment;
@@ -16,9 +17,24 @@ class TicketController extends Controller
 {
     public function dashboard()
     {
-        $totalTickets = Ticket::all()->count();
-        $openTickets = Ticket::query()->where('status', Status::Open)->count();
-        $closedTickets = Ticket::query()->where('status', Status::Closed)->count();
+        if (auth()->user()->role_id === Roles::Regular->value) {
+            $tickets = auth()->user()->tickets;
+
+            $totalTickets = $tickets->count();
+            $openTickets = $tickets->where('status', Status::Open->value)->count();
+            $closedTickets = $tickets->where('status', Status::Closed->value)->count();
+        }
+
+        if (auth()->user()->role_id !== Roles::Regular->value) {
+            $tickets = Ticket::query()
+                ->where('user_id', auth()->id())
+                ->orWhere('assigned_user_agent', auth()->id())
+                ->get();
+
+            $totalTickets = $tickets->count();
+            $openTickets = $tickets->where('status', Status::Open->value)->count();
+            $closedTickets = $tickets->where('status', Status::Closed->value)->count();
+        }
 
         return view('dashboard', compact([
             'totalTickets',
@@ -37,8 +53,14 @@ class TicketController extends Controller
 
     public function index()
     {
-        $tickets = Ticket::query()
-            ->orderBy('created_at', 'DESC')->get();
+        $tickets = auth()->user()->tickets->sortDesc();
+
+        if (auth()->user()->role_id !== Roles::Regular->value) {
+            $tickets = $tickets = Ticket::query()
+                ->where('user_id', auth()->id())
+                ->orWhere('assigned_user_agent', auth()->id())
+                ->get();
+        }
 
         return view('components.tickets.index', compact('tickets'));
     }

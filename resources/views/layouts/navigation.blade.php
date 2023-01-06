@@ -35,6 +35,13 @@
                             {{ __('Labels') }}
                         </x-nav-link>
                     @endcan
+                    @can('create', App\Models\Label::class)
+                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index') ||
+                            request()->routeIs('users.create') ||
+                            request()->routeIs('users.update')">
+                            {{ __('Users') }}
+                        </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
@@ -116,6 +123,13 @@
                     request()->routeIs('labels.create') ||
                     request()->routeIs('labels.update')">
                     {{ __('Labels') }}
+                </x-responsive-nav-link>
+            @endcan
+            @can('create', App\Models\Label::class)
+                <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.index') ||
+                    request()->routeIs('users.create') ||
+                    request()->routeIs('users.update')">
+                    {{ __('Users') }}
                 </x-responsive-nav-link>
             @endcan
         </div>

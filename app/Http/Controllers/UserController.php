@@ -11,7 +11,9 @@ class UserController extends Controller
     public function index()
     {
         return view('components.user.index', [
-            'users' => User::query()->get()
+            'users' => User::query()
+                ->orderBy('created_at', 'DESC')
+                ->get()
         ]);
     }
 
